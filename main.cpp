@@ -60,16 +60,13 @@ void crear_personaje() {
     draw_sprite(buffer, pacman, px,py);
 }
 
-
 int main()
 {
     allegro_init();
     install_keyboard();
 
-
    set_color_depth(32);
    set_gfx_mode(GFX_AUTODETECT_WINDOWED, 876, 600, 0, 0);
-
 
    buffer = create_bitmap(876,600);
    rock = load_bitmap("roca.bmp", NULL);
@@ -95,8 +92,13 @@ int main()
         draw_map();
         crear_personaje();
         show_screen();
-        rest(100);
+        rest(70);
+
         clear(pacman);
+        blit(pacbmp,pacman, 4*33,0,0,0,33,33);
+        draw_sprite(buffer, pacman, px,py);
+        show_screen();
+        rest(70);
     }
 }
 END_OF_MAIN();
