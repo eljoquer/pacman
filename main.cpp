@@ -3,8 +3,12 @@
 #define MAXCOLS 30
 BITMAP *buffer;
 BITMAP *rock;
+BITMAP *pacbmp;
+BITMAP *pacman;
 BITMAP *food;
 
+int dir = 0;
+int px = 30*10, py = 30*10;
 
 char map[MAXROWS][MAXCOLS] = {
     "XXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
@@ -51,6 +55,11 @@ void show_screen(){
     blit(buffer, screen, 0,0,0,0, 876,600);
 }
 
+void crear_personaje() {
+    blit(pacbmp,pacman, dir*33,0,0,0,33,33);
+    draw_sprite(buffer, pacman, px,py);
+}
+
 
 int main()
 {
@@ -59,19 +68,35 @@ int main()
 
 
    set_color_depth(32);
-    set_gfx_mode(GFX_AUTODETECT_WINDOWED, 876, 600, 0, 0);
+   set_gfx_mode(GFX_AUTODETECT_WINDOWED, 876, 600, 0, 0);
 
 
    buffer = create_bitmap(876,600);
    rock = load_bitmap("roca.bmp", NULL);
    food = load_bitmap("Comida.bmp", NULL);
+   pacbmp = load_bitmap("pacman.bmp",NULL);
+   pacman = create_bitmap(33,33);
+
 
 
    while(!key[KEY_ESC]){
-        draw_map();
-        show_screen();
-    }
+        if(key[KEY_RIGHT]) dir = 1; //When dir = 0 move to right
+        else if(key[KEY_LEFT]) dir = 0;
+        else if(key[KEY_UP]) dir = 2;
+        else if(key[KEY_DOWN]) dir = 3;
 
-    delete buffer, rock, food;
+        //asociarle las dirreciones para mover a pacman
+        if(dir == 0) px -= 30; //Fotogramas ->
+        if(dir == 1) px += 30; //componente en x
+        if(dir == 2) py -= 30;
+        if(dir == 3) py += 30;
+
+        clear(buffer);
+        draw_map();
+        crear_personaje();
+        show_screen();
+        rest(100);
+        clear(pacman);
+    }
 }
 END_OF_MAIN();
